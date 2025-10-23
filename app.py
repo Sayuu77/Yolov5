@@ -21,7 +21,7 @@ st.markdown("""
     :root {
         --primary: #2563EB;
         --primary-dark: #2563EB;
-        --secondary: #F8FAFC;
+        --secondary: #2563EB;
         --text: #0F172A;
         --text-light: #475569;
         --border: #E2E8F0;
