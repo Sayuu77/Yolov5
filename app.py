@@ -14,7 +14,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Estilos CSS mejorados con mejores contrastes
+# Estilos CSS mejorados
 st.markdown("""
 <style>
     /* Colores principales con mejor contraste */
@@ -47,7 +47,14 @@ st.markdown("""
         margin: 2rem 0 1rem 0;
         font-weight: 600;
         padding-bottom: 0.5rem;
-        border-bottom: 2px solid var(--border);
+    }
+    
+    .section-header-white {
+        font-size: 1.4rem;
+        color: white !important;
+        margin: 2rem 0 1rem 0;
+        font-weight: 600;
+        padding-bottom: 0.5rem;
     }
     
     .metric-card {
@@ -111,9 +118,12 @@ st.markdown("""
         border-right: 1px solid var(--border);
     }
     
-    div[data-testid="stSidebar"] .section-header {
-        color: var(--primary);
-        border-bottom-color: var(--primary);
+    .sidebar-header {
+        font-size: 1.4rem;
+        color: white !important;
+        margin: 2rem 0 1rem 0;
+        font-weight: 600;
+        padding-bottom: 0.5rem;
     }
     
     /* Streamlit components customization */
@@ -146,6 +156,11 @@ st.markdown("""
     .stInfo {
         background-color: #EFF6FF;
         border-color: var(--primary);
+    }
+    
+    /* Remove separator lines */
+    hr {
+        display: none !important;
     }
     
     /* Dataframe styling */
@@ -184,7 +199,6 @@ def load_yolov5_model(model_path='yolov5s.pt'):
 # Header elegante
 st.markdown('<h1 class="main-header">🎯 Vision AI</h1>', unsafe_allow_html=True)
 st.markdown("### Detección de objetos en tiempo real con YOLOv5")
-st.markdown("---")
 
 # Cargar modelo
 with st.spinner("🔄 Inicializando modelo de IA..."):
@@ -207,7 +221,7 @@ st.markdown("""
 if model:
     # Sidebar - Panel de control
     with st.sidebar:
-        st.markdown('<div class="section-header">Panel de Control</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sidebar-header">🎛️ Panel de Control</div>', unsafe_allow_html=True)
         
         # Parámetros principales
         st.markdown("**Parámetros de detección**")
@@ -233,7 +247,7 @@ if model:
                 st.info("Configuración básica activada")
 
     # Área principal - Cámara
-    st.markdown('<div class="section-header">📷 Captura de Imagen</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header-white">📷 Captura de Imagen</div>', unsafe_allow_html=True)
     
     # Cámara con contenedor estilizado
     st.markdown('<div class="camera-container">', unsafe_allow_html=True)
@@ -329,7 +343,6 @@ else:
     st.error("❌ No se pudo inicializar el modelo de IA")
 
 # Footer elegante
-st.markdown("---")
 st.markdown(
     """
     <div style='text-align: center; color: var(--text-light); padding: 2rem 0;'>
