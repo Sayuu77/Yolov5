@@ -207,7 +207,7 @@ st.markdown("""
 if model:
     # Sidebar - Panel de control
     with st.sidebar:
-        st.markdown('<div class="section-header">🎛️ Panel de Control</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Panel de Control</div>', unsafe_allow_html=True)
         
         # Parámetros principales
         st.markdown("**Parámetros de detección**")
