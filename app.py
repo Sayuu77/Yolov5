@@ -20,7 +20,7 @@ st.markdown("""
     /* Colores principales con mejor contraste */
     :root {
         --primary: #2563EB;
-        --primary-dark: #1D4ED8;
+        --primary-dark: #2563EB;
         --secondary: #F8FAFC;
         --text: #0F172A;
         --text-light: #475569;
