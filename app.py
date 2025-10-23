@@ -23,7 +23,7 @@ st.markdown("""
         --primary-dark: #1D4ED8;
         --secondary: #F8FAFC;
         --text: #0F172A;
-        --text-light: #2563EB;
+        --text-light: #475569;
         --border: #E2E8F0;
         --success: #059669;
         --background: #FFFFFF;
