@@ -20,8 +20,8 @@ st.markdown("""
     /* Colores principales con mejor contraste */
     :root {
         --primary: #2563EB;
-        --primary-dark: #2563EB;
-        --secondary: #2563EB;
+        --primary-dark: #1D4ED8;
+        --secondary: #F8FAFC;
         --text: #0F172A;
         --text-light: #475569;
         --border: #E2E8F0;
@@ -39,6 +39,14 @@ st.markdown("""
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+    }
+    
+    .subtitle-white {
+        font-size: 1.5rem;
+        color: white !important;
+        text-align: center;
+        margin-bottom: 2rem;
+        font-weight: 500;
     }
     
     .section-header {
@@ -126,6 +134,13 @@ st.markdown("""
         padding-bottom: 0.5rem;
     }
     
+    .sidebar-subheader {
+        font-size: 1.1rem;
+        color: white !important;
+        margin: 1.5rem 0 0.5rem 0;
+        font-weight: 600;
+    }
+    
     /* Streamlit components customization */
     .stSlider > div > div > div {
         background: var(--primary);
@@ -198,7 +213,7 @@ def load_yolov5_model(model_path='yolov5s.pt'):
 
 # Header elegante
 st.markdown('<h1 class="main-header">🎯 Vision AI</h1>', unsafe_allow_html=True)
-st.markdown("### Detección de objetos en tiempo real con YOLOv5")
+st.markdown('<div class="subtitle-white">Detección de objetos en tiempo real con YOLOv5</div>', unsafe_allow_html=True)
 
 # Cargar modelo
 with st.spinner("🔄 Inicializando modelo de IA..."):
@@ -224,7 +239,7 @@ if model:
         st.markdown('<div class="sidebar-header">🎛️ Panel de Control</div>', unsafe_allow_html=True)
         
         # Parámetros principales
-        st.markdown("**Parámetros de detección**")
+        st.markdown('<div class="sidebar-subheader">⚙️ Parámetros de Detección</div>', unsafe_allow_html=True)
         model.conf = st.slider('Confianza mínima', 0.0, 1.0, 0.25, 0.01,
                              help="Confianza requerida para considerar una detección válida")
         model.iou = st.slider('Umbral IoU', 0.0, 1.0, 0.45, 0.01,
@@ -238,7 +253,7 @@ if model:
             st.metric("IoU", f"{model.iou:.2f}")
         
         # Opciones avanzadas
-        with st.expander("⚙️ Configuración avanzada"):
+        with st.expander("🔧 Configuración avanzada"):
             try:
                 model.agnostic = st.checkbox('NMS class-agnostic', False)
                 model.multi_label = st.checkbox('Múltiples etiquetas', False)
