@@ -14,18 +14,19 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Estilos CSS elegantes y uniformes
+# Estilos CSS mejorados con mejores contrastes
 st.markdown("""
 <style>
-    /* Colores principales */
+    /* Colores principales con mejor contraste */
     :root {
-        --primary: #6366F1;
-        --primary-dark: #4F46E5;
+        --primary: #2563EB;
+        --primary-dark: #1D4ED8;
         --secondary: #F8FAFC;
-        --text: #1E293B;
-        --text-light: #64748B;
+        --text: #0F172A;
+        --text-light: #475569;
         --border: #E2E8F0;
-        --success: #10B981;
+        --success: #059669;
+        --background: #FFFFFF;
     }
     
     .main-header {
@@ -50,12 +51,12 @@ st.markdown("""
     }
     
     .metric-card {
-        background: white;
+        background: var(--background);
         padding: 1.5rem;
         border-radius: 12px;
         border: 1px solid var(--border);
         text-align: center;
-        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
     }
     
     .metric-value {
@@ -79,11 +80,29 @@ st.markdown("""
     }
     
     .result-container {
-        background: white;
+        background: var(--background);
         border-radius: 12px;
         padding: 1.5rem;
         border: 1px solid var(--border);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .instructions-box {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        margin: 1rem 0;
+    }
+    
+    .instructions-box h3 {
+        color: white;
+        margin-bottom: 1rem;
+    }
+    
+    .instructions-box li {
+        color: white;
+        margin-bottom: 0.5rem;
     }
     
     /* Sidebar styling */
@@ -115,10 +134,29 @@ st.markdown("""
         border: 1px solid var(--border);
     }
     
+    /* Text contrast improvements */
+    .stMarkdown {
+        color: var(--text);
+    }
+    
+    .stCaption {
+        color: var(--text-light) !important;
+    }
+    
+    .stInfo {
+        background-color: #EFF6FF;
+        border-color: var(--primary);
+    }
+    
     /* Dataframe styling */
     .dataframe {
         border: 1px solid var(--border) !important;
         border-radius: 8px !important;
+    }
+    
+    .dataframe th {
+        background-color: var(--primary) !important;
+        color: white !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -152,6 +190,20 @@ st.markdown("---")
 with st.spinner("🔄 Inicializando modelo de IA..."):
     model = load_yolov5_model()
 
+# Instrucciones en un lugar prominente
+st.markdown("""
+<div class="instructions-box">
+    <h3>🚀 Cómo usar esta aplicación</h3>
+    <ol>
+        <li><strong>Configura los parámetros</strong> en el panel lateral izquierdo</li>
+        <li><strong>Toma una foto</strong> usando la cámara debajo</li>
+        <li><strong>Espera el análisis automático</strong> de la imagen</li>
+        <li><strong>Revisa los resultados</strong> y estadísticas detalladas</li>
+    </ol>
+    <p><strong>💡 Tip:</strong> Ajusta el umbral de confianza para detectar más o menos objetos</p>
+</div>
+""", unsafe_allow_html=True)
+
 if model:
     # Sidebar - Panel de control
     with st.sidebar:
@@ -180,28 +232,13 @@ if model:
             except:
                 st.info("Configuración básica activada")
 
-    # Área principal
-    col_main1, col_main2 = st.columns([2, 1])
+    # Área principal - Cámara
+    st.markdown('<div class="section-header">📷 Captura de Imagen</div>', unsafe_allow_html=True)
     
-    with col_main1:
-        st.markdown('<div class="section-header">📷 Captura de Imagen</div>', unsafe_allow_html=True)
-        
-        # Cámara con contenedor estilizado
-        st.markdown('<div class="camera-container">', unsafe_allow_html=True)
-        picture = st.camera_input("Toma una foto para analizar", key="camera")
-        st.markdown('</div>', unsafe_allow_html=True)
-    
-    with col_main2:
-        st.markdown('<div class="section-header">ℹ️ Instrucciones</div>', unsafe_allow_html=True)
-        st.markdown("""
-        <div class="result-container">
-        1. **Toma una foto** usando la cámara
-        2. **Espera** el procesamiento automático
-        3. **Analiza** los resultados en tiempo real
-        4. **Ajusta** parámetros si es necesario
-        
-        El modelo detecta 80 categorías diferentes de objetos.
-        """, unsafe_allow_html=True)
+    # Cámara con contenedor estilizado
+    st.markdown('<div class="camera-container">', unsafe_allow_html=True)
+    picture = st.camera_input("Toma una foto para analizar", key="camera")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # Procesamiento de imagen
     if picture:
@@ -233,7 +270,7 @@ if model:
                 st.image(cv2_img, channels='BGR', use_container_width=True)
             
             with col_res2:
-                st.markdown("**Estadísticas**")
+                st.markdown("**Estadísticas de detección**")
                 
                 # Métricas principales
                 total_objects = len(categories)
@@ -274,8 +311,16 @@ if model:
                     
                     df = pd.DataFrame(data)
                     st.dataframe(df, use_container_width=True, hide_index=True)
+                    
+                    # Gráfico simple
+                    st.markdown("**Distribución**")
+                    chart_data = pd.DataFrame({
+                        'Categoría': [label_names[cat] for cat in category_count.keys()],
+                        'Cantidad': list(category_count.values())
+                    })
+                    st.bar_chart(chart_data.set_index('Categoría'))
                 else:
-                    st.info("No se detectaron objetos. Intenta ajustar los parámetros.")
+                    st.info("No se detectaron objetos. Intenta ajustar los parámetros en el panel lateral.")
                     
         except Exception as e:
             st.error(f"Error procesando resultados: {str(e)}")
@@ -287,8 +332,8 @@ else:
 st.markdown("---")
 st.markdown(
     """
-    <div style='text-align: center; color: var(--text-light);'>
-        <strong>Vision AI</strong> • Detección de objetos en tiempo real • Desarrollado con Streamlit y YOLOv5
+    <div style='text-align: center; color: var(--text-light); padding: 2rem 0;'>
+        <strong style='color: var(--text);'>Vision AI</strong> • Detección de objetos en tiempo real • Desarrollado con Streamlit y YOLOv5
     </div>
     """, 
     unsafe_allow_html=True
