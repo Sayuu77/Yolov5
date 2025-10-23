@@ -236,10 +236,10 @@ st.markdown("""
 if model:
     # Sidebar - Panel de control
     with st.sidebar:
-        st.markdown('<div class="sidebar-header">🎛️ Panel de Control</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sidebar-header">Panel de Control</div>', unsafe_allow_html=True)
         
         # Parámetros principales
-        st.markdown('<div class="sidebar-subheader">⚙️ Parámetros de Detección</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sidebar-subheader">Parámetros de Detección</div>', unsafe_allow_html=True)
         model.conf = st.slider('Confianza mínima', 0.0, 1.0, 0.25, 0.01,
                              help="Confianza requerida para considerar una detección válida")
         model.iou = st.slider('Umbral IoU', 0.0, 1.0, 0.45, 0.01,
@@ -253,7 +253,7 @@ if model:
             st.metric("IoU", f"{model.iou:.2f}")
         
         # Opciones avanzadas
-        with st.expander("🔧 Configuración avanzada"):
+        with st.expander("Configuración avanzada"):
             try:
                 model.agnostic = st.checkbox('NMS class-agnostic', False)
                 model.multi_label = st.checkbox('Múltiples etiquetas', False)
